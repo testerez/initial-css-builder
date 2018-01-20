@@ -90,7 +90,7 @@ const extractClassnames = (html: string) =>
     return set;
   }, new Set<string>());
 
-export const getInitialCSSBuilder = (allCss: string) => {
+export default (allCss: string) => {
   const parsed = parse(allCss);
   if (!parsed.stylesheet) {
     throw new Error("No stylesheet found");
