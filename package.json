@@ -5,7 +5,7 @@
   "scripts": {
     "test": "jest",
     "test:w": "jest --watch",
-    "release": "tsc -p . && yarn test && np",
+    "release": "yarn test && tsc -p . && yarn test && np --yolo",
     "precommit": "lint-staged"
   },
   "lint-staged": {
