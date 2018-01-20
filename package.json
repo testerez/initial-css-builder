@@ -1,0 +1,50 @@
+{
+  "dependencies": {
+    "@types/css": "^0.0.31"
+  },
+  "scripts": {
+    "test": "jest",
+    "test:w": "jest --watch",
+    "build": "rm -rf dist && tsc -p .",
+    "release": "yarn test && yarn build && np --yolo",
+    "precommit": "lint-staged"
+  },
+  "lint-staged": {
+    "*.ts": [
+      "prettier --write",
+      "git add"
+    ]
+  },
+  "devDependencies": {
+    "@types/jest": "^22.0.1",
+    "css": "^2.2.1",
+    "husky": "^0.14.3",
+    "jest": "^22.1.4",
+    "lint-staged": "^6.0.1",
+    "np": "^2.18.3",
+    "prettier": "^1.10.2",
+    "ts-jest": "^22.0.1",
+    "typescript": "^2.6.2"
+  },
+  "name": "prune-css",
+  "version": "1.0.0",
+  "description": "Filter your CSS to keep only what your HTML uses",
+  "main": "dist/index.js",
+  "repository": "https://github.com/testerez/initial-css",
+  "author": "Tom Esterez <testerez@gmail.com>",
+  "license": "MIT",
+  "jest": {
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testRegex": "src/.*.test.ts$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ]
+  }
+}
