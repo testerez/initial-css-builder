@@ -26,11 +26,12 @@
     "ts-jest": "^22.0.1",
     "typescript": "^2.6.2"
   },
-  "name": "prune-css",
+  "name": "initial-css-builder",
   "version": "1.0.0",
   "description": "Filter your CSS to keep only what your HTML uses",
   "main": "dist/index.js",
-  "repository": "https://github.com/testerez/initial-css",
+  "types": "dist/index.d.ts",
+  "repository": "https://github.com/testerez/initial-css-builder",
   "author": "Tom Esterez <testerez@gmail.com>",
   "license": "MIT",
   "jest": {
