@@ -1,7 +1,4 @@
 {
-  "dependencies": {
-    "@types/css": "^0.0.31"
-  },
   "scripts": {
     "test": "jest",
     "test:w": "jest --watch",
@@ -15,9 +12,12 @@
       "git add"
     ]
   },
+  "dependencies": {
+    "css": "^2.2.1"
+  },
   "devDependencies": {
+    "@types/css": "^0.0.31",
     "@types/jest": "^22.0.1",
-    "css": "^2.2.1",
     "husky": "^0.14.3",
     "jest": "^22.1.4",
     "lint-staged": "^6.0.1",
