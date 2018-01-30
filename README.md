@@ -16,14 +16,14 @@ npm i initial-css-builder
 import initialCssBuilder from 'initial-css-builder';
 
 // appCss: string containing all your app's CSS.
-// If you have multiple steelsheets, simply join them toguether
+// If you have multiple steelsheets, simply join them together
 
-// declared getInitialCss as a global variable so CSS parsing is done only once
+// Declare getInitialCss as a global variable so CSS parsing is done only once
 const getInitialCss = initialCssBuilder(appCss);
 
 // For each request, you can now generate your initial CSS
 // Usually takes less than 5ms!
 const initialCSS = getInitialCss(contentHtml);
 
-// then you should inject this CSS into your HTML, before the content
+// then you should inject `initialCSS` in a `<style>` tag in your `head`
 ```
