@@ -28,7 +28,7 @@
     "typescript": "^2.6.2"
   },
   "name": "initial-css-builder",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Filter your CSS to keep only what your HTML uses",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
