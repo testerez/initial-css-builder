@@ -33,6 +33,9 @@ const getSelectorMatchs = (
     return modifier === "." ? { classes: [name] } : { ids: [name] };
   }
 
+  // remove any :not()
+  selector = selector.replace(/\:not\([^)]*\)/g, "");
+
   // To be safe for more complex selectors, we extract any id or classe present in the selector
   return {
     classes: getMatchs(/\.([\w\d-]+)/gi, selector).map(m => m[1]),
@@ -61,7 +64,7 @@ type CandidateRule = {
   css: string;
 };
 
-const getRuleCss = (rule: any) =>
+const getRuleCss = (rule: any, compress: boolean) =>
   stringify(
     {
       type: "stylesheet",
@@ -69,18 +72,21 @@ const getRuleCss = (rule: any) =>
         rules: [rule]
       }
     },
-    { compress: true }
+    { compress }
   );
 
-const processRule = (rule: Rule | AtRule): CandidateRule => {
-  const css = getRuleCss(rule);
+const processRule = (compress: boolean) => (
+  rule: Rule | AtRule
+): CandidateRule => {
+  const css = getRuleCss(rule, compress);
   const selectors = getRuleSelectors(rule);
-  if (!selectors || selectors.find(s => /^[^.#]+$/i.test(s))) {
+  const selectorElements = parseSelectors(selectors || []);
+  if (!selectorElements.classes.length && !selectorElements.ids.length) {
     return { css, alwaysInclude: true };
   }
   return {
     css,
-    ...parseSelectors(selectors)
+    ...selectorElements
   };
 };
 
@@ -90,13 +96,13 @@ const extractClassnames = (html: string) =>
     return set;
   }, new Set<string>());
 
-export default (allCss: string) => {
+export default (allCss: string, compress: boolean = true) => {
   const parsed = parse(allCss);
   if (!parsed.stylesheet) {
     throw new Error("No stylesheet found");
   }
   const candidateRules: CandidateRule[] = parsed.stylesheet.rules.map(
-    processRule
+    processRule(compress)
   );
 
   return (html: string) => {
@@ -108,6 +114,6 @@ export default (allCss: string) => {
           rule.classes!.find(classname => classnames.has(classname))
       )
       .map(rule => rule.css)
-      .join("");
+      .join(compress ? "" : "\n");
   };
 };

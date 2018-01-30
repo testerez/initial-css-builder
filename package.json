@@ -4,7 +4,8 @@
     "test:w": "jest --watch",
     "build": "rm -rf dist && tsc -p .",
     "release": "yarn test && yarn build && np --yolo",
-    "precommit": "lint-staged"
+    "precommit": "lint-staged",
+    "checkts": "tsc -p . --noEmit"
   },
   "lint-staged": {
     "*.ts": [
