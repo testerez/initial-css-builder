@@ -90,20 +90,25 @@ const processRule = (compress: boolean) => (
   };
 };
 
+const classNamesRegexp = /\bclass\s*=\s*["']([^"']+)["']/gi;
 const extractClassnames = (html: string) =>
-  getMatchs(/\bclass\s*=\s*["']([^"']+)["']/gi, html).reduce((set, m) => {
+  getMatchs(classNamesRegexp, html).reduce((set, m) => {
     m[1].split(/\s+/).forEach(className => set.add(className));
     return set;
   }, new Set<string>());
 
 export default (allCss: string, compress: boolean = true) => {
-  const parsed = parse(allCss);
+  const parsed = parse(allCss, { silent: true });
   if (!parsed.stylesheet) {
     throw new Error("No stylesheet found");
   }
-  const candidateRules: CandidateRule[] = parsed.stylesheet.rules.map(
-    processRule(compress)
-  );
+  const candidateRules: CandidateRule[] = [
+    ...parsed.stylesheet.rules.map(processRule(compress)),
+    ...(parsed.stylesheet.parsingErrors || []).filter(e => e.source).map(e => ({
+      alwaysInclude: true,
+      css: e.source!
+    }))
+  ];
 
   return (html: string) => {
     const classnames = extractClassnames(html);

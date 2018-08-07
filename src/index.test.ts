@@ -102,4 +102,9 @@ describe("initialCssBuilder", () => {
     expect(initialCSS).toContain("div > a");
     expect(initialCSS).toContain("div > a:not(.foo)");
   });
+
+  it("should tolerate css errors", () => {
+    const initialCss = getInitialCSSBuilder("body { font-size: 12px; }{}")("");
+    expect(initialCss).toEqual("body{font-size:12px;}{}");
+  });
 });
