@@ -1,5 +1,5 @@
 import puppeteer from 'puppeteer';
-import initialCssBuilder from '../src';
+import initialCssBuilder from '..';
 import { takeFullPageScreeshot } from './takeFullPageScreeshot';
 import * as path from 'path';
 import * as fs from 'fs';
