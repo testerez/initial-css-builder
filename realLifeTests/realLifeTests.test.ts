@@ -1,18 +1,18 @@
-import puppeteer from "puppeteer";
-import initialCssBuilder from "../src";
-import { takeFullPageScreeshot } from "./takeFullPageScreeshot";
-import * as path from "path";
-import * as fs from "fs";
-import pixelmatch from "pixelmatch";
-import sizeOf from "buffer-image-size";
-import filesize from "filesize";
+import puppeteer from 'puppeteer';
+import initialCssBuilder from '../src';
+import { takeFullPageScreeshot } from './takeFullPageScreeshot';
+import * as path from 'path';
+import * as fs from 'fs';
+import pixelmatch from 'pixelmatch';
+import sizeOf from 'buffer-image-size';
+import filesize from 'filesize';
 
 jest.setTimeout(60000);
 
 const pageWidths = [1200, 400];
 
-describe("realLifeTests", () => {
-  const testsDirectory = path.join(__dirname, "testsData");
+describe('realLifeTests', () => {
+  const testsDirectory = path.join(__dirname, 'testsData');
   fs.readdirSync(testsDirectory).forEach(d => {
     it(d, async () => {
       const { css, html } = require(path.join(testsDirectory, d));
@@ -24,18 +24,18 @@ describe("realLifeTests", () => {
 
         const htmlOriginalCss = html.replace(
           /<head>/i,
-          `<head><style>${css}</style>`
+          `<head><style>${css}</style>`,
         );
 
         const criticalCss = initialCssBuilder(css)(html);
         const htmlCriticalCss = html.replace(
           /<head>/i,
-          `<head><style>${criticalCss}</style>`
+          `<head><style>${criticalCss}</style>`,
         );
         console.log(
           `Original: ${filesize(css.length)}, Initial: ${filesize(
-            criticalCss.length
-          )}`
+            criticalCss.length,
+          )}`,
         );
 
         for (const pageWidth of pageWidths) {
@@ -52,7 +52,7 @@ describe("realLifeTests", () => {
             screenshotCriticalCss,
             null,
             width,
-            height
+            height,
           );
 
           expect(diffCount).toEqual(0);

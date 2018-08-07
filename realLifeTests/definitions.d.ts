@@ -1,1 +1,1 @@
-declare module "buffer-image-size";
+declare module 'buffer-image-size';

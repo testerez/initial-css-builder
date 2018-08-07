@@ -6,7 +6,8 @@
     "release": "yarn test && yarn build && np --yolo",
     "precommit": "lint-staged",
     "checkts": "tsc -p . --noEmit",
-    "createRealLifeTest": "ts-node -T ./realLifeTests/createRealLifeTest.ts"
+    "createRealLifeTest": "ts-node -T ./realLifeTests/createRealLifeTest.ts",
+    "reformat": "prettier --write **/*.ts"
   },
   "lint-staged": {
     "*.ts": [

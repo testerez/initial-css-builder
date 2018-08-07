@@ -1,11 +1,11 @@
-import { Rule, AtRule, stringify, parse } from "css";
+import { Rule, AtRule, stringify, parse } from 'css';
 // tslint:disable-next-line:import-blacklist
 
 const getRuleSelectors = (rule: any): string[] | undefined => {
   switch (rule.type) {
-    case "rule":
+    case 'rule':
       return rule.selectors;
-    case "media":
+    case 'media':
       return rule.rules.reduce((acc: string[], rule: any) => {
         acc.push.apply(acc, rule.selectors);
         return acc;
@@ -23,23 +23,23 @@ const getMatchs = (re: RegExp, s: string) => {
 };
 
 const getSelectorMatchs = (
-  selector: string
+  selector: string,
 ): { ids?: string[]; classes?: string[] } => {
   // for example if selector is `div.foo .bar` then the css should be included
   // only if the page contains `.foo` (`.bar` can be ignored)
   const singleIdOrClassMatch = selector.match(/$[a-z\s]*([.#])([\w\d-])/i);
   if (singleIdOrClassMatch) {
     const [, modifier, name] = singleIdOrClassMatch;
-    return modifier === "." ? { classes: [name] } : { ids: [name] };
+    return modifier === '.' ? { classes: [name] } : { ids: [name] };
   }
 
   // remove any :not()
-  selector = selector.replace(/\:not\([^)]*\)/g, "");
+  selector = selector.replace(/\:not\([^)]*\)/g, '');
 
   // To be safe for more complex selectors, we extract any id or classe present in the selector
   return {
     classes: getMatchs(/\.([\w\d-]+)/gi, selector).map(m => m[1]),
-    ids: getMatchs(/\#([\w\d-]+)/gi, selector).map(m => m[1])
+    ids: getMatchs(/\#([\w\d-]+)/gi, selector).map(m => m[1]),
   };
 };
 
@@ -67,16 +67,16 @@ type CandidateRule = {
 const getRuleCss = (rule: any, compress: boolean) =>
   stringify(
     {
-      type: "stylesheet",
+      type: 'stylesheet',
       stylesheet: {
-        rules: [rule]
-      }
+        rules: [rule],
+      },
     },
-    { compress }
+    { compress },
   );
 
 const processRule = (compress: boolean) => (
-  rule: Rule | AtRule
+  rule: Rule | AtRule,
 ): CandidateRule => {
   const css = getRuleCss(rule, compress);
   const selectors = getRuleSelectors(rule);
@@ -86,7 +86,7 @@ const processRule = (compress: boolean) => (
   }
   return {
     css,
-    ...selectorElements
+    ...selectorElements,
   };
 };
 
@@ -100,14 +100,14 @@ const extractClassnames = (html: string) =>
 export default (allCss: string, compress: boolean = true) => {
   const parsed = parse(allCss, { silent: true });
   if (!parsed.stylesheet) {
-    throw new Error("No stylesheet found");
+    throw new Error('No stylesheet found');
   }
   const candidateRules: CandidateRule[] = [
     ...parsed.stylesheet.rules.map(processRule(compress)),
     ...(parsed.stylesheet.parsingErrors || []).filter(e => e.source).map(e => ({
       alwaysInclude: true,
-      css: e.source!
-    }))
+      css: e.source!,
+    })),
   ];
 
   return (html: string) => {
@@ -116,9 +116,9 @@ export default (allCss: string, compress: boolean = true) => {
       .filter(
         rule =>
           rule.alwaysInclude ||
-          rule.classes!.find(classname => classnames.has(classname))
+          rule.classes!.find(classname => classnames.has(classname)),
       )
       .map(rule => rule.css)
-      .join(compress ? "" : "\n");
+      .join(compress ? '' : '\n');
   };
 };

@@ -1,5 +1,5 @@
 /* tslint:disable max-line-length */
-import getInitialCSSBuilder from ".";
+import getInitialCSSBuilder from '.';
 
 const getInitialCss = getInitialCSSBuilder(`
   @font-face {
@@ -36,8 +36,8 @@ const getInitialCss = getInitialCSSBuilder(`
   }
 `);
 
-describe("initialCssBuilder", () => {
-  it("should extract classnames & associated @rules", () => {
+describe('initialCssBuilder', () => {
+  it('should extract classnames & associated @rules', () => {
     const initialCSS = getInitialCss(`
       <!DOCTYPE html>
       <html>
@@ -52,25 +52,25 @@ describe("initialCssBuilder", () => {
       </html>
     `);
 
-    expect(initialCSS).toContain(".class_1");
-    expect(initialCSS).not.toContain(".class_2");
-    expect(initialCSS).not.toContain(".class_3");
+    expect(initialCSS).toContain('.class_1');
+    expect(initialCSS).not.toContain('.class_2');
+    expect(initialCSS).not.toContain('.class_3');
     expect(initialCSS).not.toContain(
-      "@media screen and (max-width:550px){.class_2{background:#fff;}}"
+      '@media screen and (max-width:550px){.class_2{background:#fff;}}',
     );
 
-    expect(initialCSS).toContain("@font-face{font-family:Walsheim");
+    expect(initialCSS).toContain('@font-face{font-family:Walsheim');
     expect(initialCSS).toContain(
-      "@media screen and (max-width:550px){.class_1{background:#fff;}}"
+      '@media screen and (max-width:550px){.class_1{background:#fff;}}',
     );
     expect(initialCSS).toContain(
-      "@keyframes test{from{background-color:red;}to{background-color:yellow;}}"
+      '@keyframes test{from{background-color:red;}to{background-color:yellow;}}',
     );
-    expect(initialCSS).toContain("div > a");
-    expect(initialCSS).toContain("div > a:not(.foo)");
+    expect(initialCSS).toContain('div > a');
+    expect(initialCSS).toContain('div > a:not(.foo)');
   });
 
-  it("should extract animations keyframes", () => {
+  it('should extract animations keyframes', () => {
     const initialCSS = getInitialCss(`
       <!DOCTYPE html>
       <html>
@@ -85,26 +85,26 @@ describe("initialCssBuilder", () => {
       </html>
     `);
 
-    expect(initialCSS).toContain(".class_3");
-    expect(initialCSS).not.toContain(".class_1");
-    expect(initialCSS).not.toContain(".class_2");
+    expect(initialCSS).toContain('.class_3');
+    expect(initialCSS).not.toContain('.class_1');
+    expect(initialCSS).not.toContain('.class_2');
     expect(initialCSS).not.toContain(
-      "@media screen and (max-width:550px){.class_1{background:#fff;}}"
+      '@media screen and (max-width:550px){.class_1{background:#fff;}}',
     );
     expect(initialCSS).not.toContain(
-      "@media screen and (max-width:550px){.class_2{background:#fff;}}"
+      '@media screen and (max-width:550px){.class_2{background:#fff;}}',
     );
 
-    expect(initialCSS).toContain("@font-face{font-family:Walsheim");
+    expect(initialCSS).toContain('@font-face{font-family:Walsheim');
     expect(initialCSS).toContain(
-      "@keyframes test{from{background-color:red;}to{background-color:yellow;}}"
+      '@keyframes test{from{background-color:red;}to{background-color:yellow;}}',
     );
-    expect(initialCSS).toContain("div > a");
-    expect(initialCSS).toContain("div > a:not(.foo)");
+    expect(initialCSS).toContain('div > a');
+    expect(initialCSS).toContain('div > a:not(.foo)');
   });
 
-  it("should tolerate css errors", () => {
-    const initialCss = getInitialCSSBuilder("body { font-size: 12px; }{}")("");
-    expect(initialCss).toEqual("body{font-size:12px;}{}");
+  it('should tolerate css errors', () => {
+    const initialCss = getInitialCSSBuilder('body { font-size: 12px; }{}')('');
+    expect(initialCss).toEqual('body{font-size:12px;}{}');
   });
 });
