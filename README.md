@@ -1,3 +1,5 @@
+**This library is experimental**
+
 To get a super fast first paint of your HTML pages, google recommends that you insert all CSS required to display your above the fold content directly in your page's head. So then loadding your full stylesheets can be moved after content. See https://developers.google.com/speed/docs/insights/OptimizeCSSDelivery
 
 To generate this critical CSS you can use tools like [penthouse](https://github.com/pocketjoso/penthouse) but as this is spinning a headless chrome under the hood, it shouldn't be used to generate the CSS on the fly. The problem is that calculating above the fold content is complicated and can't be accurate because you don't actually know your clien's browser size. Also, if the user scrolls the page while your full CSS is loading, he may see unstyled content.
