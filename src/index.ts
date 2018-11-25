@@ -27,7 +27,7 @@ const getSelectorMatchs = (
 ): { ids?: string[]; classes?: string[] } => {
   // for example if selector is `div.foo .bar` then the css should be included
   // only if the page contains `.foo` (`.bar` can be ignored)
-  const singleIdOrClassMatch = selector.match(/$[a-z\s]*([.#])([\w\d-])/i);
+  const singleIdOrClassMatch = selector.match(/^[a-z\s]*([.#])([\w\d-]+)/i);
   if (singleIdOrClassMatch) {
     const [, modifier, name] = singleIdOrClassMatch;
     return modifier === '.' ? { classes: [name] } : { ids: [name] };

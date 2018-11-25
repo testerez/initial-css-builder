@@ -107,4 +107,18 @@ describe('initialCssBuilder', () => {
     const initialCss = getInitialCSSBuilder('body { font-size: 12px; }{}')('');
     expect(initialCss).toEqual('body{font-size:12px;}{}');
   });
+
+  it("shouldn't include unused chained class", () => {
+    const initialCss = getInitialCSSBuilder('.a .b {color: red}')(
+      '<div class="b"/>',
+    );
+    expect(initialCss).toEqual('');
+  });
+
+  it("shouldn't include unused chained id", () => {
+    const initialCss = getInitialCSSBuilder('div#a .b {color: red}')(
+      '<div class="b"/>',
+    );
+    expect(initialCss).toEqual('');
+  });
 });
