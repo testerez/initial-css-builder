@@ -1,9 +1,11 @@
 import { Page } from 'puppeteer';
+import * as fs from 'fs';
+import { PNG } from 'pngjs';
 
-export const takeFullPageScreeshot = async (page: Page, path?: string) => {
+export const takeFullPageScreeshot = async (page: Page, path: string) => {
   const bodyHandle = (await page.$('body'))!;
   const { width, height } = (await bodyHandle.boundingBox())!;
-  const result = await page.screenshot({
+  await page.screenshot({
     path,
     clip: {
       x: 0,
@@ -13,5 +15,10 @@ export const takeFullPageScreeshot = async (page: Page, path?: string) => {
     },
   });
   await bodyHandle.dispose();
-  return result;
+  return new Promise<PNG>(resolve => {
+    const png: PNG = fs
+      .createReadStream(path)
+      .pipe(new PNG())
+      .on('parsed', () => resolve(png));
+  });
 };

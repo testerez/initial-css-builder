@@ -2,11 +2,11 @@ import puppeteer from 'puppeteer';
 import initialCssBuilder from '..';
 import { takeFullPageScreeshot } from './takeFullPageScreeshot';
 import * as path from 'path';
-import * as fs from 'fs';
 import pixelmatch from 'pixelmatch';
 import sizeOf from 'buffer-image-size';
 import filesize from 'filesize';
 import * as mkdirp from 'mkdirp';
+import * as fs from 'fs';
 import { PNG } from 'pngjs';
 
 jest.setTimeout(60000);
@@ -72,11 +72,11 @@ describe('realLifeTests', () => {
             path.join(resultPath, 'critical.png'),
           );
 
-          const { width, height } = sizeOf(screenshotOriginalCss);
+          const { width, height } = screenshotOriginalCss;
           const diff = new PNG({ width, height });
           const diffCount = pixelmatch(
-            screenshotOriginalCss,
-            screenshotCriticalCss,
+            screenshotOriginalCss.data,
+            screenshotCriticalCss.data,
             diff.data,
             width,
             height,
