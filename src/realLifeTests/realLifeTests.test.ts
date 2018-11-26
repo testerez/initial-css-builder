@@ -6,6 +6,8 @@ import * as fs from 'fs';
 import pixelmatch from 'pixelmatch';
 import sizeOf from 'buffer-image-size';
 import filesize from 'filesize';
+import * as mkdirp from 'mkdirp';
+import { PNG } from 'pngjs';
 
 jest.setTimeout(60000);
 
@@ -38,22 +40,53 @@ describe('realLifeTests', () => {
           )}`,
         );
 
+        fs.writeFileSync(
+          path.resolve(__dirname, 'results', d, 'page.html'),
+          html.replace(
+            /<head>/i,
+            `<head><link rel="stylesheet" type="text/css" href="./critical.css">`,
+          ),
+        );
+        fs.writeFileSync(
+          path.resolve(__dirname, 'results', d, 'critical.css'),
+          criticalCss,
+        );
+
         for (const pageWidth of pageWidths) {
           await page.setViewport({ width: pageWidth, height: 800 });
           await page.setContent(htmlOriginalCss);
-          const screenshotOriginalCss = await takeFullPageScreeshot(page);
+          const resultPath = path.resolve(
+            __dirname,
+            'results',
+            d,
+            pageWidth + 'px',
+          );
+          mkdirp.sync(resultPath);
+          const screenshotOriginalCss = await takeFullPageScreeshot(
+            page,
+            path.join(resultPath, 'original.png'),
+          );
           await page.setContent(htmlCriticalCss);
-          const screenshotCriticalCss = await takeFullPageScreeshot(page);
+          const screenshotCriticalCss = await takeFullPageScreeshot(
+            page,
+            path.join(resultPath, 'critical.png'),
+          );
 
           const { width, height } = sizeOf(screenshotOriginalCss);
-
+          const diff = new PNG({ width, height });
           const diffCount = pixelmatch(
             screenshotOriginalCss,
             screenshotCriticalCss,
-            null,
+            diff.data,
             width,
             height,
           );
+          if (diffCount) {
+            diff.pack().pipe(
+              fs.createWriteStream(path.join(resultPath, 'diff.png')),
+              { end: true },
+            );
+          }
 
           expect(diffCount).toEqual(0);
         }
